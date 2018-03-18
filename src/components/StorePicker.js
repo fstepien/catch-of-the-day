@@ -2,21 +2,19 @@ import React from 'react';
 import { getFunName } from "../helpers";
 class StorePicker extends React.Component {
 
-  constructor(){
-    super();
-    this.goToStore = this.goToStore.bind(this);
-  }
+  // constructor(){
+  //   super();
+  //   this.goToStore = this.goToStore.bind(this);
+  // }
   
   myInput = React.createRef();
 
-  
-
-  goToStore(e){
+  goToStore = e => {
     e.preventDefault();
     // This only works because it has been bound in the contsctur
     const storeName = this.myInput.value.value;
     this.props.history.push(`/store/${storeName}`)
-  }
+  } 
 
   render(){
     return (
