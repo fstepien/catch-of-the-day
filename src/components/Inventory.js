@@ -6,9 +6,17 @@ import Login from "./Login";
 import base, { firebaseApp } from "../base";
 class Inventory extends React.Component {
   
-  state {
+  state = {
     uid: null, 
     owner: null
+  }
+
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      if(user) {
+        this.authHandler({user});
+      }
+    })
   }
 
   authHandler = async (authData) => {
@@ -31,11 +39,32 @@ class Inventory extends React.Component {
       .then(this.authHandler);
   }
 
+  logout = async () => {
+    console.log('loggin out');
+    await firebase.auth().signOut();
+    this.setState({uid: null});
+  }
+
   render(){
+    
+    const logout = <button onClick={this.logout}>Log Out!</button>
+
+    if(!this.state.uid){
     return <Login authenticate={this.authenticate}/>;
-    return (
-  <div className="inventory">
+    }
+
+    if(this.state.uid !== this.state.owner) {
+     <div>
+      <p>Sorry you are not the store owner!</p>
+      {logout}
+     </div>  
+     }
+     
+     
+     return (
+       <div className="inventory">
     <h2>Inventory</h2>
+       {logout}
       {Object.keys(this.props.fish).map(key => (
         <EditFishForm 
         key={key}
